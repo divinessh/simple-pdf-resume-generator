@@ -1,0 +1,107 @@
+<!--Created by Divinessh-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Resume Generator</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
+
+    ::selection{
+      background:gold;
+      color:white;
+    }
+
+    body {
+      font-family: Poppins, Arial, sans-serif;
+      background-color: royalblue;
+      padding: 20px;
+    }
+    .container {
+      max-width: 700px;
+      margin: auto;
+      background: white;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2{
+      color:royalblue;
+    }
+    input, textarea {
+      font-family:poppins;
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      font-family:poppins;
+      background-color: royalblue;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover{
+      opacity:0.8;
+      transition:0.3s;
+    }
+    #resume-output {
+      margin-top: 30px;
+      padding: 20px;
+      border: 1px dashed #ccc;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Simple PDF Resume Generator</h2>
+    <input type="text" id="name" placeholder="Full Name" required>
+    <input type="text" id="email" placeholder="Email" required>
+    <input type="text" id="skills" placeholder="Skills (comma separated)" required>
+    <textarea id="about" placeholder="About Me" rows="4" required></textarea>
+    <button onclick="generateResume()">Generate Resume</button>
+    <button onclick="downloadPDF()">Download as PDF</button>
+
+    <div id="resume-output"></div>
+  </div>
+
+  <script>
+    function generateResume() {
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const skills = document.getElementById('skills').value.split(',').map(skill => skill.trim());
+      const about = document.getElementById('about').value;
+
+      const output = `
+        <div id="resume">
+          <h2>${name}</h2>
+          <p><strong>Email:</strong> ${email}</p>
+          <h3>About Me</h3>
+          <p>${about}</p>
+          <h3>Skills</h3>
+          <ul>
+            ${skills.map(skill => `<li>${skill}</li>`).join('')}
+          </ul>
+        </div>
+      `;
+
+      document.getElementById('resume-output').innerHTML = output;
+    }
+
+    function downloadPDF() {
+      const resumeElement = document.getElementById('resume');
+      if (!resumeElement) {
+        alert("Please generate the resume first!");
+        return;
+      }
+      html2pdf().from(resumeElement).save("My_Resume.pdf");
+    }
+  </script>
+</body>
+</html>
